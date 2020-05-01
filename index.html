@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Disrupted</title>
-		<script type="text/javascript" src="./jscript/d3.js"></script>
+		<script type="text/javascript" src="../jscript/d3.js"></script>
 		<style type="text/css">
 
 			.axis {
@@ -21,9 +21,73 @@
 				fill: teal;
 				stroke: yellow;
 			}
-
+			.pArea:hover  {
+				fill: rgb(255, 184, 77);
+			}
+			.nArea:hover {
+				fill: rgb(92, 214, 92)
+			}
 			.unclickable {
 				pointer-events: none;
+			}
+			.introButtons {
+				cursor: pointer;
+			}
+			.introButtons text {
+				font-weight: bold;
+			}
+
+			.dayButtons {
+				cursor: pointer;
+			}
+
+			.dayButtons text {
+				font-weight: bold;
+			}
+			#vizTitle {
+				font-weight: bold;
+				font-family: Helvetica, sans-serif;
+				font-size: 35px;
+			}
+
+			#pTitle {
+				font-weight: bold;
+				font-size: 20px;
+			}
+
+			#nTitle {
+				font-weight: bold;
+				font-size: 20px;
+			}
+			#pieTitle {
+				font-weight: bold;
+				font-size: 20px;
+			}
+
+			.calendar text {
+				font-weight: bold;
+			}
+			.score text {
+				font-weight: bold;
+			}
+			#life:hover rect {
+				fill: rgb(255, 194, 102);
+			}
+			#clutter:hover rect {
+				fill: rgb(204, 153, 102);
+			}
+			#notif:hover rect {
+				fill: rgb(51, 214, 255);
+			}
+			#pickups:hover rect {
+				fill: rgb(214, 51, 255);
+			}
+			#declutter:hover rect {
+				fill: rgb(128, 255, 0);
+			}
+
+			.calendar:hover rect {
+				fill: rgb(26, 117, 255);
 			}
 
 		</style>
@@ -52,25 +116,25 @@
 
 			tScale.ticks(d3.timeMinute.every(15));
 			//add project title
-			svg.append('text').attr('x', 320).attr('y', margin.top)
-			.text('Disrupted: Focus & Productivity in the Smartphone Age')
-			.attr('font-size', 30);
+			svg.append('text').attr('x', 200).attr('y', margin.top)
+			.text('Disrupted: Losing Focus & Productivity in the Smartphone Age')
+			.attr('font-size', 30).attr('id', 'vizTitle');
 			
 			//icons locations
 			var icons = {
-					'instagram': './images/instagram.png',
-			   		'facebook': './images/facebook.png',
-			   		'gmail': './images/gmail2.png',
-			   		'slack': './images/slack3.png',
-			   		'whatsapp': './images/whatsapp.png',
-			   		'messenger': './images/messenger.png',
-			   		'hinge': './images/hinge.png',
-			   		'reddit': './images/reddit.png',
-			   		'duolingo': './images/duolingo.png',
-			   		'linkedin': './images/linkedin.png',
-			   		'botim': './images/botim.png',
-			   		'spotify': './images/spotify.png',
-			   		'messaging': './images/messaging.png'
+					'instagram': '../images/instagram.png',
+			   		'facebook': '../images/facebook.png',
+			   		'gmail': '../images/gmail2.png',
+			   		'slack': '../images/slack3.png',
+			   		'whatsapp': '../images/whatsapp.png',
+			   		'messenger': '../images/messenger.png',
+			   		'hinge': '../images/hinge.png',
+			   		'reddit': '../images/reddit.png',
+			   		'duolingo': '../images/duolingo.png',
+			   		'linkedin': '../images/linkedin.png',
+			   		'botim': '../images/botim.png',
+			   		'spotify': '../images/spotify.png',
+			   		'messaging': '../images/messaging.png'
 
 			   	};
 			//blockCount init   	
@@ -169,7 +233,7 @@
 				declutterButton.transition().duration(1500).attr('opacity', 1);
 
 				svg.selectAll('text#pTitle').transition().duration(1500).attr('opacity', 1);
-				svg.selectAll('g.score').transition().duration(1500).attr('opacity', 1);
+				//svg.selectAll('g.score').transition().duration(1500).attr('opacity', 1);
 			})
 
 			declutterButton.on('click', function(){
@@ -183,7 +247,7 @@
 				svg.selectAll('g.dayButtons').transition().duration(1500).attr('opacity',1);
 			})
 			
-			d3.csv('./data/calendar.csv', function(data) {
+			d3.csv('../data/calendar.csv', function(data) {
 				//console.table(data);
 				calendarData = data;
 				var dayArr = filterCalendar(data, initDay);
@@ -191,7 +255,7 @@
 			   
 			});
 
-			d3.csv('./data/interruptions2.csv', function(data) {
+			d3.csv('../data/interruptions2.csv', function(data) {
 				intData = data;
 				var dayInt = filterInt(data, initDay);
 				populateInt(dayInt, initDay);
@@ -199,7 +263,7 @@
 
 			 
 			
-			d3.csv('./data/apps-time.csv', pieRowConverter, function(data) {
+			d3.csv('../data/apps-time.csv', pieRowConverter, function(data) {
 				apptimeData = data;
 				var piedata = filterAppTime(data, initDay)
 				populatePie(piedata);
@@ -208,7 +272,7 @@
 			
 			
 
-			d3.csv('./data/notifs-pickups.csv', areaRowConverter, function(data) {
+			d3.csv('../data/notifs-pickups.csv', areaRowConverter, function(data) {
 				notifpickupData = data;
 				populatePickupArea(data, initDay);
 				populateNotifArea(data, initDay);
@@ -413,7 +477,8 @@
 				pieGroup.append('text')
 						.attr('x', (0.75*w - 20)).attr('y', (h/3 - 15))
 						.text('Time Spent (mins) on each app')
-						.attr('opacity',0);
+						.attr('opacity',0)
+						.attr('id', 'pieTitle');
 				//create a group for each contain arcs
 				var arcs = pieGroup.selectAll('g.arc')
 							  .data(makePie(data))
@@ -612,56 +677,56 @@
 				if (day == 'monday') {
 					var score = svg.append('g').attr('class', 'score');
 					score.append('text')
-					.attr('x',300 + 4*(100 + introButtonSpacing) + 200).attr('y',150 )
-					.text('Autonomy Score: ' + monscore.toFixed(3)).attr('opacity', 1)
+					.attr('x', 600).attr('y',100 )
+					.text('Selected Day: ' + 'Monday' + ' | ' + 'Autonomy Score: ' + monscore.toFixed(3)).attr('opacity', 1)
 					.attr('fill', 'lightcoral');
 					return monscore;
 				}
 
 				if (day == 'tuesday') {
 					var score = svg.append('g').attr('class', 'score');
-					score.append('text').attr('x', 300 + 4*(100 + introButtonSpacing) + 220).attr('y',150)
-						 .text('Autonomy Score: ' + tuescore.toFixed(3)).attr('opacity', 1)
+					score.append('text').attr('x', 600).attr('y',100 )
+						 .text('Selected Day: ' + 'Tuesday' + ' | ' + 'Autonomy Score: ' + tuescore.toFixed(3)).attr('opacity', 1)
 						 .attr('fill', 'lightcoral');
 					return tuescore;
 				}
 
 				if (day == 'wednesday') {
 					var score = svg.append('g').attr('class', 'score');
-					score.append('text').attr('x',300 + 4*(100 + introButtonSpacing)+ 220)
-					.attr('y', 150).text('Autonomy Score: ' + wedscore.toFixed(3)).attr('opacity', 1)
+					score.append('text').attr('x', 600).attr('y',100 )
+					.text('Selected Day: ' + 'Wednesday' + ' | ' + 'Autonomy Score: ' + wedscore.toFixed(3)).attr('opacity', 1)
 					.attr('fill', 'lightcoral');
 					return wedscore;
 				}
 
 				if (day == 'thursday') {
 					var score = svg.append('g').attr('class', 'score');
-					score.append('text').attr('x', 300 + 4*(100 + introButtonSpacing)+ 220)
-					.attr('y',150 ).text('Autonomy Score: ' + thuscore.toFixed(3)).attr('opacity', 1)
+					score.append('text').attr('x', 600).attr('y',100 )
+					.text('Selected Day: ' + 'Thursday' + ' | ' + 'Autonomy Score: ' + thuscore.toFixed(3)).attr('opacity', 1)
 					.attr('fill', 'lightcoral');
 					return thuscore;
 				}
 
 				if (day == 'friday') {
 					var score = svg.append('g').attr('class', 'score');
-					score.append('text').attr('x',300 + 4*(100 + introButtonSpacing)+ 220 ).attr('y',150 )
-					.text('Autonomy Score: ' + friscore.toFixed(3)).attr('opacity', 1)
+					score.append('text').attr('x', 600).attr('y',100 )
+					.text('Selected Day: ' + 'Friday' + ' | ' + 'Autonomy Score: ' + friscore.toFixed(3)).attr('opacity', 1)
 					.attr('fill', 'lightcoral');
 					return friscore;
 				}
 
 				if (day == 'saturday') {
 					var score = svg.append('g').attr('class', 'score');
-					score.append('text').attr('x', 300 + 4*(100 + introButtonSpacing)+ 220).attr('y', 150)
-					.text('Autonomy Score: ' + satscore.toFixed(3)).attr('opacity', 0).attr('opacity', 1)
+					score.append('text').attr('x', 600).attr('y',100 )
+					.text('Selected Day: ' + 'Saturday' + ' | ' + 'Autonomy Score: ' + satscore.toFixed(3)).attr('opacity', 0).attr('opacity', 1)
 					.attr('fill', 'lightcoral');
 					return satscore;
 				}
 
 				if (day == 'sunday') {
 					var score = svg.append('g').attr('class', 'score');
-					score.append('text').attr('x', 300 + 4*(100 + introButtonSpacing)+ 220).attr('y',150 )
-					.text('Autonomy Score: ' + sunscore.toFixed(3)).attr('opacity', 1)
+					score.append('text').attr('x', 600).attr('y',100 )
+					.text('Selected Day: ' + 'Sunday' + ' | ' + 'Autonomy Score: ' + sunscore.toFixed(3)).attr('opacity', 1)
 					.attr('fill', 'lightcoral');
 					return sunscore;
 				}
